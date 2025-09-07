@@ -1,25 +1,37 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as productService from '../services/productService';
+import { successResponse, errorResponse } from '../utils/response';
 
-export const getProducts = async (req: Request, res: Response) => {
-  const products = await productService.getAllProducts();
-  res.json(products);
+export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const products = await productService.getAllProducts();
+    return successResponse(res, products, 'Productos obtenidos correctamente');
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const createProduct = async (req: Request, res: Response) => {
-  const { name, description, price } = req.body;
-  if (!name || !description || !price) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { name, description, price } = req.body;
+    const product = await productService.createProduct({ name, description, price });
+    return successResponse(res, product, 'Producto creado correctamente', 201);
+  } catch (err) {
+    next(err);
   }
-  const product = await productService.createProduct({ name, description, price });
-  res.status(201).json(product);
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const deleted = await productService.deleteProduct(Number(id));
-  if (!deleted) {
-    return res.status(404).json({ error: 'Producto no encontrado' });
+export const deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const deleted = await productService.deleteProduct(Number(id));
+
+    if (!deleted) {
+      return errorResponse(res, 'Producto no encontrado', 404);
+    }
+
+    return successResponse(res, null, 'Producto eliminado correctamente', 200);
+  } catch (err) {
+    next(err);
   }
-  res.status(204).send();
 };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as productService from '../services/productService';
 import { successResponse, errorResponse } from '../utils/response';
+import { formatProductName, formatProductDescription } from '../utils/textFormatter'
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,7 +14,9 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
 
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, description, price } = req.body;
+    let { name, description, price } = req.body
+    name = formatProductName(name)
+    description = formatProductDescription(description)
     const product = await productService.createProduct({ name, description, price });
     return successResponse(res, product, 'Producto creado correctamente', 201);
   } catch (err) {

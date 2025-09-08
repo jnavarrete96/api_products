@@ -85,7 +85,7 @@ PORT=3000
 npm run dev
 ```
 
-La API estará disponible en: `http://localhost:3000`
+La API estará disponible en: `http://localhost:3000/api`
 
 ## 📚 Documentación de API
 
@@ -104,30 +104,6 @@ http://localhost:3000/api-docs
 | GET | `/products` | Obtener todos los productos |
 | POST | `/products` | Crear un nuevo producto |
 | DELETE | `/products/:id` | Eliminar un producto por ID |
-
-### Ejemplos de Uso
-
-#### Obtener todos los productos
-```bash
-curl -X GET http://localhost:3000/api/products
-```
-
-#### Crear un nuevo producto
-```bash
-curl -X POST http://localhost:3000/api/products \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "laptop dell",
-    "description": "laptop con 16gb ram",
-    "price": 1200.50
-  }'
-```
-
-#### Eliminar un producto
-```bash
-curl -X DELETE http://localhost:3000/api/products/1
-```
-
 
 ## 📝 Formato de Datos
 
